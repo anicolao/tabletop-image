@@ -1,10 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    (pkgs.path + "/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix")
-  ];
-
   # Nixpkgs architecture
   nixpkgs.hostPlatform = "aarch64-linux";
 
