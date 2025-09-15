@@ -26,5 +26,12 @@
         nix
       ];
     };
+
+    devShells.aarch64-darwin.default = nixpkgs.legacyPackages.aarch64-darwin.mkShell {
+      packages = with nixpkgs.legacyPackages.aarch64-darwin; [
+        make
+        nix
+      ];
+    };
   };
 }
