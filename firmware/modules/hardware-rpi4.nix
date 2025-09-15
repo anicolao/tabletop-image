@@ -2,15 +2,15 @@
 
 {
   # Raspberry Pi 4 specific hardware configuration
+  # This module configures raspberry-pi hardware support
   boot = {
-    # Use the latest LTS kernel
-    kernelPackages = pkgs.linuxPackages_rpi4;
+    # Use the latest stable kernel
+    kernelPackages = pkgs.linuxPackages;
     
-    # Raspberry Pi 4 bootloader
-    loader.raspberryPi = {
-      enable = true;
-      version = 4;
-      uboot.enable = true;
+    # Raspberry Pi 4 bootloader configuration
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible.enable = true;
     };
     
     # Required kernel modules for Raspberry Pi 4
@@ -46,11 +46,7 @@
       "console=tty1"
       
       # GPU memory split (128MB for GPU)
-      "gpu_mem=128"
       "cma=128M"
-      
-      # Enable 64-bit mode
-      "arm_64bit=1"
       
       # Disable rainbow splash screen
       "disable_splash=1"
@@ -64,84 +60,10 @@
       # Audio configuration
       "snd_bcm2835.enable_headphones=1"
     ];
-    
-    # Additional firmware configuration
-    loader.raspberryPi.firmwareConfig = ''
-      # GPU configuration
-      gpu_mem=128
-      
-      # Display configuration
-      hdmi_group=2
-      hdmi_mode=82
-      hdmi_drive=2
-      
-      # Enable HDMI hotplug
-      hdmi_force_hotplug=1
-      
-      # Audio configuration
-      dtparam=audio=on
-      
-      # I2C for touchscreens
-      dtparam=i2c_arm=on
-      dtparam=i2c1=on
-      
-      # SPI configuration
-      dtparam=spi=on
-      
-      # Enable camera (in case needed for future features)
-      start_x=0
-      
-      # Disable ACT LED (power saving)
-      dtparam=act_led_trigger=none
-      dtparam=act_led_activelow=off
-      
-      # Overclock settings (conservative for stability)
-      arm_freq=1500
-      core_freq=500
-      sdram_freq=500
-      over_voltage=2
-      
-      # Temperature limit (prevent throttling)
-      temp_limit=80
-    '';
   };
 
   # Hardware support packages
   hardware = {
-    # Enable Raspberry Pi 4 specific hardware
-    raspberry-pi."4" = {
-      apply-overlays-dtmerge.enable = true;
-      fkms-3d.enable = true;
-    };
-    
-    # Device tree configuration
-    deviceTree = {
-      enable = true;
-      filter = "*rpi-4-*.dtb";
-      
-      # Enable touchscreen overlays
-      overlays = [
-        {
-          name = "vc4-fkms-v3d";
-          dtsText = ''
-            /dts-v1/;
-            /plugin/;
-            
-            / {
-              compatible = "brcm,bcm2835";
-              
-              fragment@0 {
-                target-path = "/chosen";
-                __overlay__ {
-                  bootargs = "vc4.fkms_max_refresh_rate=60";
-                };
-              };
-            };
-          '';
-        }
-      ];
-    };
-    
     # Enable GPU acceleration
     opengl = {
       enable = true;

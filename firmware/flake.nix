@@ -74,25 +74,6 @@
             grub.enable = false;
             generic-extlinux-compatible.enable = true;
           };
-          
-          # Kernel parameters for Raspberry Pi 4
-          kernelParams = [
-            "console=serial0,115200"
-            "console=tty1"
-            "cma=128M"  # GPU memory
-          ];
-          
-          # Enable required kernel modules
-          kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
-        };
-
-        # Hardware support
-        hardware = {
-          raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-          deviceTree = {
-            enable = true;
-            filter = "*rpi-4-*.dtb";
-          };
         };
 
         # Graphics and input
