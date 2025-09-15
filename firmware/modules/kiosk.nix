@@ -188,7 +188,7 @@
         
         <div style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">
           <div>Network: <span id="network-status">Checking...</span></div>
-          <div>Build: NixOS • Version: 24.05</div>
+          <div>Build: NixOS • Version: 24.11</div>
         </div>
       </div>
       

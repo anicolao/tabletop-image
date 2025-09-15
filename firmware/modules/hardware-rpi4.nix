@@ -65,10 +65,9 @@
   # Hardware support packages
   hardware = {
     # Enable GPU acceleration
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = false;  # Not needed for ARM64
+      enable32Bit = false;  # Not needed for ARM64
     };
   };
 
@@ -99,16 +98,12 @@
     mediaKeys.enable = false;  # Not needed for kiosk
   };
   
-  hardware.pulseaudio = {
+  # Use PipeWire for modern audio handling
+  security.rtkit.enable = true;
+  services.pipewire = {
     enable = true;
-    support32Bit = false;  # Not needed for ARM64
-    
-    # Audio configuration for Raspberry Pi 4
-    configFile = pkgs.runCommand "default.pa" {} ''
-      cat ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
-      echo "load-module module-alsa-sink device=hw:0,0" >> $out
-      echo "load-module module-alsa-source device=hw:0,0" >> $out
-    '';
+    alsa.enable = true;
+    pulse.enable = true;
   };
 
   # Input devices and touchscreen support
@@ -200,7 +195,7 @@
 
   # Firmware packages
   hardware.firmware = with pkgs; [
-    raspberrypifw
+    # Standard firmware for wireless devices
     wireless-regdb
   ];
 

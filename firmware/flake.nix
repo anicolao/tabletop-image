@@ -2,7 +2,7 @@
   description = "Tabletop Image - Raspberry Pi 4 Kiosk Firmware";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,7 +31,7 @@
         ];
 
         # Basic system configuration
-        system.stateVersion = "24.05";
+        system.stateVersion = "24.11";
         
         # Networking
         networking = {
@@ -82,12 +82,6 @@
           displayManager.lightdm.enable = false;
           displayManager.startx.enable = true;
           
-          # No window manager - direct Chromium launch
-          windowManager.session = [{
-            name = "chromium-kiosk";
-            start = "";
-          }];
-          
           # Touch input support
           libinput = {
             enable = true;
@@ -97,7 +91,14 @@
 
         # Audio support
         sound.enable = true;
-        hardware.pulseaudio.enable = true;
+        
+        # Use PipeWire for modern audio handling
+        security.rtkit.enable = true;
+        services.pipewire = {
+          enable = true;
+          alsa.enable = true;
+          pulse.enable = true;
+        };
 
         # Security
         security.sudo.wheelNeedsPassword = false;  # For emergency access
@@ -120,7 +121,7 @@
       };
 
       # Default package
-      defaultPackage.${system} = self.packages.${system}.tabletopImage;
+      packages.default = self.packages.${system}.tabletopImage;
 
       # NixOS configuration for testing/development
       nixosConfigurations.tabletop = nixpkgs.lib.nixosSystem {
