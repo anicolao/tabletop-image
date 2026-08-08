@@ -1,4 +1,24 @@
-# Tabletop Image
+# tabletop-image — archived
+
+**Superseded by [anicolao/tabletop-os](https://github.com/anicolao/tabletop-os),
+which is the authoritative source of tabletop images.**
+
+This repository is archived and read-only. Nothing here builds.
+
+The goals described below are still the goals; only the implementation was
+wrong. The build system in the unmerged PR #4 was generated rather than written,
+and does not work: it imports no hardware module at all, so there is no path to
+GPU acceleration on a Pi; it uses NixOS options (`sound.enable`,
+`services.xserver.libinput`) removed from NixOS years earlier; its `packages`
+output is malformed; and its kiosk unit is a system service ordered against
+`graphical-session.target`, a user target, so it would never have started.
+
+`tabletop-os` targets the **Orange Pi 5 Plus** (RK3588, Mali-G610) as primary,
+with Raspberry Pi 5 and 4 planned.
+
+---
+
+## Original goals
 
 A Nix-based build system for creating Raspberry Pi 4 SD card images that transform your device into a dedicated tabletop gaming kiosk.
 
